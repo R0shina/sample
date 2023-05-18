@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* 
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import "tailwindcss/base";
+@tailwind "tailwindcss/components";
+@tailwind "tailwindcss/utilites"; */
+
+.bg{
+    background-image: url(/image 1.png);
+    background-size: cover;
+}
