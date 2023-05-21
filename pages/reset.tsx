@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import Image from "next/image";
-// import Link from "next/link";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
 import { useState } from "react";
 import 'tailwindcss/tailwind.css';
-import InputFields from "./components/Inputfields";
-import Button from "./components/Button";
-import Header from "./components/Header";
+import Button from "../components/Button";
+import Header from "../components/Header";
+import Inputfields from "@/components/Inputfields";
+import { formValues } from "./login";
+
 
 
 export default function log() {
@@ -12,12 +16,8 @@ export default function log() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const [showHide, setShowHide] = useState(false);
-    const [showHide2, setShowHide2] = useState(false);
+  
     const handleClick = (event: any) => {
-
-    }
-    const handleSubmit = (event: any) => {
         event.preventDefault();
         if (password !== confirmPassword) {
             setPasswordError('Passwords do not match');
@@ -28,20 +28,23 @@ export default function log() {
 
     };
 
-    const handleShow = () => {
-        setShowHide(!showHide);
-    }
 
-    const handleShow2 = () => {
-        setShowHide2(!showHide2);
-    }
+    const { register, handleSubmit, formState: { errors }, 
+    // watch
+    } = useForm<formValues>({ mode: 'all' });
+
+
+    const onSubmit = (data: formValues) => {
+        console.log(data);
+    };
+
 
     return (
         <div className="h-screen" style={{
             backgroundImage: `url("/image 1.png")`
         }}>
             <div className=" pt-10 pr-30 flex justify-center">
-                <form onSubmit={handleSubmit} className="pl-5 p w-96 bg-white shadow-md rounded ">
+                <form  onSubmit={handleSubmit(onSubmit)}  className="pl-5 p w-96 bg-white shadow-md rounded ">
 
                     <div className="flex justify-center p-10 pr-16 pt-10 pb-4 py-9 ">
                         <Image className="flex-wrap" alt="" style={{ flexDirection: 'column', justifyContent: 'center' }}
@@ -52,16 +55,38 @@ export default function log() {
                         />
 
                     </div>
-                    <div className=" font-semibold text-black text-xl text-bold pl-4 pt-5 ">Reset Password </div>
 
-                      <div onClick={handleClick} >
-                        <InputFields label="Password" type="password" />
+                    
+                    <Header headername="Reset Password" />
+                    {/* <div className=" font-semibold text-black text-xl text-bold pl-4 pt-5 ">Reset Password </div> */}
+
+                
+                    <div onClick={handleClick}>
+                        <Inputfields label="Password" type="password" name="password" placeholder="Enter Password"
+                            register={register}
+                            option={{ required: { value: true, message: "* This field should not be empty" } }}
+                            error={errors.password?.message || passwordError }
+                            onChange={(event:any) => {
+                                setPassword(event.target.value)
+                                setPasswordError('');
+                            }}
+                        />
                     </div>
+                
 
-                    <div onClick={handleClick} >
-                        <InputFields label="Re-enter Password" type="password" />
+                  
+                    <div onClick={handleClick}>
+
+                        <Inputfields label="Re-enter Password" type="password" name="cpassword" placeholder="Enter Password"
+                            register={register}
+                            option={{ required: { value: true, message: "* Reenter the password" } }}
+                            error={errors.cpassword?.message || confirmPasswordError}
+                            onChange={(event:any) => {
+                                setConfirmPassword(event.target.value)
+                                setConfirmPasswordError('');
+                            }}
+                        />
                     </div>
-
                     {/* <div onClick={handleClick} className="pt-5 pl-4 w-80 text-sm font-semibold">
 
                         <label className="text-black  text-sm " id="un">Password
@@ -88,7 +113,7 @@ export default function log() {
                     </div> */}
                     {/* {confirmPasswordError && <p className="text-red-600" >{confirmPasswordError}</p>} */}
                     {/* {confirmPassword.length > 0 ? "" : <p className="text-red-600 text-xs font-semibold pl-4 " >*Password must be greater than 5</p>} */}
-                   
+
 
 
 
